@@ -1,0 +1,1021 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: #f5f5f5;
+  color: #333333;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Yu Gothic",
+    "Meiryo",
+    sans-serif;
+}
+
+.container {
+  width: min(100% - 32px, 700px);
+  margin: 0 auto;
+  padding: 32px 0 60px;
+}
+
+h1 {
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.description {
+  margin-top: 0;
+  margin-bottom: 24px;
+  color: #666666;
+  text-align: center;
+}
+
+.record-section {
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.record-section h2 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+label {
+  display: block;
+  margin-bottom: 16px;
+  font-weight: bold;
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="text"],
+select,
+textarea {
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  background-color: #ffffff;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.date-time-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.checkbox-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.checkbox-list label {
+  margin: 0;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f3f3f3;
+  font-weight: normal;
+}
+
+button {
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#set-current-time {
+  background-color: #e7e7e7;
+}
+
+.save-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #333333;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.saved-records-section {
+  margin-top: 30px;
+}
+
+.empty-message {
+  margin: 0;
+  color: #777777;
+}
+
+@media (max-width: 500px) {
+  .date-time-inputs,
+  .checkbox-list {
+    grid-template-columns: 1fr;
+  }
+
+  .container {
+    width: min(100% - 20px, 700px);
+    padding-top: 20px;
+  }
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 70px 1fr 70px;
+  align-items: center;
+  min-height: 64px;
+  padding: 8px 16px;
+  border-bottom: 1px solid #dddddd;
+  background-color: #ffffff;
+}
+
+.app-header h1 {
+  grid-column: 2;
+  margin: 0;
+  font-size: 21px;
+  text-align: center;
+}
+
+.back-button {
+  grid-column: 1;
+  padding: 8px;
+  background-color: transparent;
+  color: #333333;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.screen {
+  display: none;
+}
+
+.active-screen {
+  display: block;
+}
+
+.home-date {
+  margin: 0 0 20px;
+  color: #666666;
+  text-align: center;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.menu-button {
+  display: flex;
+  min-height: 110px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid #e2e2e2;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  font-weight: bold;
+}
+
+.menu-button:active {
+  transform: scale(0.98);
+}
+
+.menu-icon {
+  font-size: 30px;
+  font-weight: normal;
+}
+
+.preparation-screen {
+  text-align: center;
+}
+
+.preparation-screen p {
+  color: #666666;
+  line-height: 1.7;
+}
+
+@media (min-width: 600px) {
+  .menu-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.section-description {
+  margin-top: -4px;
+  margin-bottom: 18px;
+  color: #666666;
+  line-height: 1.7;
+}
+
+.sleep-action-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.sleep-button {
+  min-height: 64px;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.bedtime-button {
+  background-color: #4d5875;
+}
+
+.waketime-button {
+  background-color: #6d7f63;
+}
+
+.status-message {
+  min-height: 24px;
+  margin: 14px 0 0;
+  color: #555555;
+  text-align: center;
+}
+
+.sleep-record-card {
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+  background-color: #fafafa;
+}
+
+.sleep-record-card:first-child {
+  margin-top: 0;
+}
+
+.sleep-record-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sleep-record-header h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.sleep-record-times {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.sleep-time-box {
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #ffffff;
+}
+
+.sleep-time-label {
+  display: block;
+  margin-bottom: 5px;
+  color: #666666;
+  font-size: 13px;
+}
+
+.sleep-time-value {
+  font-weight: bold;
+}
+
+.sleep-duration {
+  margin: 0;
+  font-weight: bold;
+}
+
+.sleep-record-card.open-sleep-record {
+  border-color: #9ba2b5;
+}
+
+.sleep-record-card.open-sleep-record .sleep-duration {
+  color: #666666;
+}
+
+@media (max-width: 500px) {
+  .sleep-action-buttons,
+  .sleep-record-times {
+    grid-template-columns: 1fr;
+  }
+}
+
+.registered-medicine-list {
+  margin-top: 18px;
+}
+
+.registered-medicine-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid #dddddd;
+  border-radius: 9px;
+  background-color: #fafafa;
+}
+
+.registered-medicine-card:first-child {
+  margin-top: 0;
+}
+
+.registered-medicine-information {
+  min-width: 0;
+}
+
+.registered-medicine-name {
+  margin: 0;
+  font-weight: bold;
+}
+
+.registered-medicine-dose {
+  margin: 4px 0 0;
+  color: #666666;
+  font-size: 14px;
+}
+
+.medicine-record-button {
+  width: 100%;
+  min-height: 54px;
+  background-color: #596d8b;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.medicine-record-card {
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+  background-color: #fafafa;
+}
+
+.medicine-record-card:first-child {
+  margin-top: 0;
+}
+
+.medicine-record-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.medicine-record-header h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.medicine-record-datetime {
+  margin: 5px 0 0;
+  color: #666666;
+  font-size: 14px;
+}
+
+.medicine-record-details {
+  margin: 14px 0 0;
+  line-height: 1.7;
+}
+
+.medicine-record-details p {
+  margin: 5px 0;
+}
+
+.hidden-input {
+  display: none;
+}
+
+.unit-input {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.unit-input input {
+  margin-top: 0;
+}
+
+.unit-input span {
+  color: #555555;
+  font-weight: normal;
+}
+
+.caffeine-record-button {
+  width: 100%;
+  min-height: 54px;
+  background-color: #7b654d;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.section-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.section-title-row h2 {
+  margin-bottom: 0;
+}
+
+.today-total {
+  margin: 0;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background-color: #f0ece7;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.caffeine-record-card {
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+  background-color: #fafafa;
+}
+
+.caffeine-record-card:first-child {
+  margin-top: 18px;
+}
+
+.caffeine-record-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.caffeine-record-header h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.caffeine-record-datetime {
+  margin: 5px 0 0;
+  color: #666666;
+  font-size: 14px;
+}
+
+.caffeine-amount {
+  margin: 14px 0 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.caffeine-note {
+  margin: 8px 0 0;
+  line-height: 1.7;
+}
+
+@media (max-width: 500px) {
+  .section-title-row {
+    display: block;
+  }
+
+  .today-total {
+    display: inline-block;
+    margin-top: 10px;
+  }
+}
+
+.outing-action-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.outing-button {
+  min-height: 60px;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.outing-start-button {
+  background-color: #54718a;
+}
+
+.outing-return-button {
+  background-color: #68785f;
+}
+
+.outing-record-card,
+.housework-record-card {
+  margin-top: 14px;
+  padding: 16px;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+  background-color: #fafafa;
+}
+
+.outing-record-card:first-child,
+.housework-record-card:first-child {
+  margin-top: 0;
+}
+
+.outing-record-header,
+.housework-record-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.outing-record-header h3,
+.housework-record-header h3 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.outing-record-times {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.outing-time-box {
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #ffffff;
+}
+
+.outing-time-label {
+  display: block;
+  margin-bottom: 5px;
+  color: #666666;
+  font-size: 13px;
+}
+
+.outing-time-value {
+  font-weight: bold;
+}
+
+.outing-duration {
+  margin: 10px 0 0;
+  font-weight: bold;
+}
+
+.open-outing-record {
+  border-color: #8d9daf;
+}
+
+.housework-record-button {
+  width: 100%;
+  min-height: 54px;
+  background-color: #627766;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.housework-datetime {
+  margin: 5px 0 0;
+  color: #666666;
+  font-size: 14px;
+}
+
+.housework-items {
+  margin: 14px 0 0;
+  line-height: 1.7;
+  font-weight: bold;
+}
+
+.record-note {
+  margin: 8px 0 0;
+  line-height: 1.7;
+}
+
+@media (max-width: 500px) {
+  .outing-action-buttons,
+  .outing-record-times {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========================================
+   カレンダー
+======================================== */
+
+.calendar-header {
+  display: grid;
+  grid-template-columns: 48px 1fr 48px;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.calendar-header h2 {
+  margin: 0;
+  text-align: center;
+}
+
+.calendar-move-button {
+  min-height: 42px;
+  background-color: #eeeeee;
+  font-size: 20px;
+}
+
+.calendar-weekdays,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar-weekdays {
+  margin-bottom: 6px;
+  color: #666666;
+  font-size: 13px;
+  text-align: center;
+}
+
+.calendar-weekdays span {
+  padding: 6px 0;
+}
+
+.calendar-day {
+  position: relative;
+  min-width: 0;
+  min-height: 70px;
+  padding: 8px 4px;
+  border: 2px solid #ffffff;
+  border-radius: 9px;
+  background-color: #f6f6f6;
+  text-align: center;
+}
+
+.calendar-day:hover {
+  background-color: #eeeeee;
+}
+
+.calendar-day.empty-day {
+  cursor: default;
+  background-color: transparent;
+}
+
+.calendar-day.today {
+  border-color: #777777;
+}
+
+.calendar-day.selected-day {
+  background-color: #dddddd;
+}
+
+.calendar-day-number {
+  display: block;
+  font-weight: bold;
+}
+
+.calendar-record-count {
+  display: inline-block;
+  margin-top: 7px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  background-color: #666666;
+  color: #ffffff;
+  font-size: 11px;
+}
+
+.calendar-today-button {
+  display: block;
+  margin: 18px auto 0;
+  background-color: #eeeeee;
+}
+
+.calendar-record-group {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #dddddd;
+}
+
+.calendar-record-group:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.calendar-record-group h3 {
+  margin: 0 0 10px;
+  font-size: 17px;
+}
+
+.calendar-record-item {
+  margin-top: 8px;
+  padding: 11px;
+  border-radius: 8px;
+  background-color: #f7f7f7;
+  line-height: 1.7;
+}
+
+.calendar-record-item:first-of-type {
+  margin-top: 0;
+}
+
+/* ========================================
+   統計
+======================================== */
+
+.statistics-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.statistics-card {
+  display: flex;
+  min-height: 130px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.statistics-label {
+  color: #666666;
+  font-size: 14px;
+}
+
+.statistics-card strong {
+  margin: 9px 0 5px;
+  font-size: 25px;
+}
+
+.statistics-unit {
+  color: #777777;
+  font-size: 12px;
+}
+
+.statistics-bars {
+  display: grid;
+  gap: 18px;
+}
+
+.statistics-bar-row {
+  display: grid;
+  grid-template-columns: 55px 1fr 40px;
+  align-items: center;
+  gap: 10px;
+}
+
+.statistics-bar-track {
+  height: 18px;
+  overflow: hidden;
+  border-radius: 10px;
+  background-color: #eeeeee;
+}
+
+.statistics-bar-fill {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background-color: #666666;
+  transition: width 0.3s ease;
+}
+
+.statistics-list-row {
+  display: grid;
+  grid-template-columns: minmax(90px, 1fr) 2fr 50px;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.statistics-list-row:first-child {
+  margin-top: 0;
+}
+
+.statistics-small-bar {
+  height: 12px;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: #eeeeee;
+}
+
+.statistics-small-bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background-color: #777777;
+}
+
+.statistics-list-count {
+  text-align: right;
+  font-weight: bold;
+}
+
+@media (max-width: 500px) {
+  .calendar-day {
+    min-height: 58px;
+    padding: 6px 2px;
+  }
+
+  .calendar-record-count {
+    margin-top: 5px;
+    padding: 1px 5px;
+    font-size: 10px;
+  }
+
+  .statistics-summary-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .statistics-card {
+    min-height: 120px;
+    padding: 10px;
+  }
+
+  .statistics-card strong {
+    font-size: 21px;
+  }
+
+  .statistics-list-row {
+    grid-template-columns: 85px 1fr 45px;
+  }
+}
+
+/* ========================================
+   設定
+======================================== */
+
+.data-count-list {
+  display: grid;
+  gap: 10px;
+}
+
+.data-count-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #f6f6f6;
+}
+
+.data-count-row strong {
+  flex-shrink: 0;
+}
+
+.settings-primary-button,
+.settings-secondary-button,
+.danger-button {
+  width: 100%;
+  min-height: 52px;
+  font-weight: bold;
+}
+
+.settings-primary-button {
+  background-color: #596d8b;
+  color: #ffffff;
+}
+
+.settings-secondary-button {
+  margin-top: 14px;
+  background-color: #e6e6e6;
+  color: #333333;
+}
+
+.file-input-label input {
+  padding: 10px;
+  background-color: #f7f7f7;
+}
+
+.danger-section {
+  border: 1px solid #d5aaaa;
+}
+
+.danger-section h2 {
+  color: #8a3333;
+}
+
+.danger-button {
+  background-color: #a94747;
+  color: #ffffff;
+}
+
+/* ========================================
+   編集機能
+======================================== */
+
+.record-action-buttons {
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+.edit-button {
+  padding: 8px 12px;
+  background-color: #dde5ee;
+  color: #333333;
+}
+
+.form-action-buttons {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+.cancel-edit-button {
+  padding: 12px 16px;
+  background-color: #eeeeee;
+  color: #333333;
+}
+
+.hidden-button {
+  display: none;
+}
+
+.editing-message {
+  margin: 0 0 16px;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #fff5d9;
+  color: #66521b;
+  text-align: center;
+}
+
+@media (max-width: 500px) {
+  .record-action-buttons {
+    flex-direction: column;
+  }
+
+  .form-action-buttons {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========================================
+   ワンタップ記録
+======================================== */
+
+.quick-record-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.quick-record-button {
+  display: flex;
+  min-height: 78px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 5px;
+  padding: 14px;
+  border: 1px solid #d9d9d9;
+  background-color: #f7f7f7;
+  text-align: left;
+}
+
+.quick-record-button strong {
+  font-size: 16px;
+}
+
+.quick-record-button span {
+  color: #666666;
+  font-size: 13px;
+}
+
+.quick-record-button:active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 500px) {
+  .quick-record-grid {
+    grid-template-columns: 1fr;
+  }
+}

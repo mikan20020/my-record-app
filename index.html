@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>わたしの記録</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header class="app-header">
+    <button
+      type="button"
+      id="back-button"
+      class="back-button hidden"
+    >
+      ← 戻る
+    </button>
+
+    <h1 id="screen-title">わたしの記録</h1>
+  </header>
+
+  <main class="container">
+    <!-- ホーム画面 -->
+    <section id="home-screen" class="screen active-screen">
+      <p class="home-date" id="home-date"></p>
+
+      <div class="menu-grid">
+        <button
+          type="button"
+          class="menu-button"
+          data-screen="daily-screen"
+          data-title="今日の状態"
+        >
+          <span class="menu-icon">◯</span>
+          <span>今日の状態</span>
+        </button>
+
+        <button
+          type="button"
+          class="menu-button"
+          data-screen="sleep-screen"
+          data-title="睡眠"
+        >
+          <span class="menu-icon">☾</span>
+          <span>睡眠</span>
+        </button>
+
+        <button
+          type="button"
+          class="menu-button"
+          data-screen="medicine-screen"
+          data-title="薬"
+        >
+          <span class="menu-icon">＋</span>
+          <span>薬</span>
+        </button>
+
+        <button
+          type="button"
+          class="menu-button"
+          data-screen="caffeine-screen"
+          data-title="カフェイン"
+        >
+          <span class="menu-icon">☕</span>
+          <span>カフェイン</span>
+        </button>
+
+        <button
+          type="button"
+          class="menu-button"
+          data-screen="outing-screen"
+          data-title="外出"
+        >
+          <span class="menu-icon">→</span>
+          <span>外出</span>
+        </button>
+
+        <button
+          type="button"
+          class="menu-button"
+          data-screen="housework-screen"
+          data-title="家事"
+        >
+          <span class="menu-icon">✓</span>
+          <span>家事</span>
+        </button>
+
+        <button
+          type="button"
+          class="menu-button"
+          data-screen="calendar-screen"
+          data-title="カレンダー"
+        >
+          <span class="menu-icon">▦</span>
+          <span>カレンダー</span>
+        </button>
+
+        <button
+          type="button"
+          class="menu-button"
+          data-screen="statistics-screen"
+          data-title="統計"
+        >
+          <span class="menu-icon">▥</span>
+          <span>統計</span>
+        </button>
+
+        <button
+          type="button"
+          class="menu-button"
+          data-screen="settings-screen"
+          data-title="設定"
+        >
+          <span class="menu-icon">⚙</span>
+          <span>設定</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 今日の状態 -->
+    <section id="daily-screen" class="screen">
+      <form id="daily-record-form">
+        <section class="record-section">
+          <h2>記録日時</h2>
+
+          <div class="date-time-inputs">
+            <label>
+              日付
+              <input type="date" id="record-date">
+            </label>
+
+            <label>
+              時刻
+              <input type="time" id="record-time">
+            </label>
+          </div>
+
+          <button type="button" id="set-current-time">
+            現在の日時を入力
+          </button>
+        </section>
+
+        <section class="record-section">
+          <h2>状態</h2>
+
+          <label>
+            気分
+            <select id="mood">
+              <option value="">選択してください</option>
+              <option value="1">1：とても悪い</option>
+              <option value="2">2：悪い</option>
+              <option value="3">3：普通</option>
+              <option value="4">4：良い</option>
+              <option value="5">5：とても良い</option>
+            </select>
+          </label>
+
+          <label>
+            眠気
+            <select id="sleepiness">
+              <option value="">選択してください</option>
+              <option value="1">1：まったく眠くない</option>
+              <option value="2">2：あまり眠くない</option>
+              <option value="3">3：少し眠い</option>
+              <option value="4">4：かなり眠い</option>
+              <option value="5">5：とても眠い</option>
+            </select>
+          </label>
+
+          <label>
+            やる気
+            <select id="motivation">
+              <option value="">選択してください</option>
+              <option value="1">1：まったくない</option>
+              <option value="2">2：あまりない</option>
+              <option value="3">3：普通</option>
+              <option value="4">4：ある</option>
+              <option value="5">5：とてもある</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="record-section">
+          <h2>体調</h2>
+
+          <div class="checkbox-list">
+            <label>
+              <input type="checkbox" name="condition" value="頭痛">
+              頭痛
+            </label>
+
+            <label>
+              <input type="checkbox" name="condition" value="腹痛">
+              腹痛
+            </label>
+
+            <label>
+              <input type="checkbox" name="condition" value="だるさ">
+              だるさ
+            </label>
+
+            <label>
+              <input type="checkbox" name="condition" value="吐き気">
+              吐き気
+            </label>
+          </div>
+
+          <label>
+            その他
+            <input
+              type="text"
+              id="other-condition"
+              placeholder="症状を入力"
+            >
+          </label>
+        </section>
+
+        <section class="record-section">
+          <h2>今日の出来事・感じたこと</h2>
+
+          <textarea
+            id="daily-note"
+            rows="6"
+            placeholder="自由に入力してください"
+          ></textarea>
+        </section>
+
+        <button type="submit" class="save-button">
+          保存する
+        </button>
+      </form>
+
+      <section class="record-section saved-records-section">
+        <h2>保存した記録</h2>
+
+        <div id="record-list">
+          <p class="empty-message">
+            まだ記録はありません。
+          </p>
+        </div>
+      </section>
+    </section>
+
+    <!-- 睡眠 -->
+<section id="sleep-screen" class="screen">
+  <section class="record-section">
+    <h2>現在時刻で記録</h2>
+
+    <p class="section-description">
+      ボタンを押した時点の日付と時刻を記録します。
+    </p>
+
+    <div class="sleep-action-buttons">
+      <button
+        type="button"
+        id="record-bedtime-button"
+        class="sleep-button bedtime-button"
+      >
+        就寝を記録
+      </button>
+
+      <button
+        type="button"
+        id="record-waketime-button"
+        class="sleep-button waketime-button"
+      >
+        起床を記録
+      </button>
+    </div>
+
+    <p id="sleep-status-message" class="status-message"></p>
+  </section>
+
+  <section class="record-section">
+    <h2>日時を指定して記録</h2>
+
+    <p class="section-description">
+      記録し忘れた場合や、時刻を修正したい場合に使用します。
+    </p>
+
+    <form id="manual-sleep-form">
+  <input
+    type="hidden"
+    id="editing-sleep-id"
+  >
+
+  <p
+    id="sleep-editing-message"
+    class="editing-message hidden-button"
+  >
+    睡眠記録を編集中です。
+  </p>
+
+  <label>
+    就寝日時
+    <input
+      type="datetime-local"
+      id="manual-bedtime"
+    >
+  </label>
+
+  <label>
+    起床日時
+    <input
+      type="datetime-local"
+      id="manual-waketime"
+    >
+  </label>
+
+  <div class="form-action-buttons">
+    <button
+      type="submit"
+      id="manual-sleep-save-button"
+      class="save-button"
+    >
+      睡眠記録を保存
+    </button>
+
+    <button
+      type="button"
+      id="cancel-sleep-edit-button"
+      class="cancel-edit-button hidden-button"
+    >
+      編集をキャンセル
+    </button>
+  </div>
+</form>
+  </section>
+
+  <section class="record-section">
+    <h2>睡眠履歴</h2>
+
+    <div id="sleep-record-list">
+      <p class="empty-message">
+        まだ睡眠記録はありません。
+      </p>
+    </div>
+  </section>
+</section>
+
+<!-- 薬 -->
+<section id="medicine-screen" class="screen">
+  <section class="record-section">
+    <h2>よく使う薬</h2>
+
+    <p class="section-description">
+      登録した薬は、下のボタンを押すだけで現在時刻に服用記録を追加できます。
+    </p>
+
+    <div id="medicine-quick-list" class="quick-record-grid">
+      <p class="empty-message">
+        まだ薬は登録されていません。
+      </p>
+    </div>
+
+    <p
+      id="medicine-status-message"
+      class="status-message"
+    ></p>
+  </section>
+
+  <section class="record-section">
+    <h2 id="medicine-form-title">
+      薬を登録
+    </h2>
+
+    <form id="medicine-registration-form">
+      <input
+        type="hidden"
+        id="editing-medicine-id"
+      >
+
+      <label>
+        薬の名前
+        <input
+          type="text"
+          id="medicine-name"
+          placeholder="例：ピル、頭痛薬"
+        >
+      </label>
+
+      <label>
+        通常の服用量
+        <input
+          type="text"
+          id="medicine-default-dose"
+          placeholder="例：1錠、10mg"
+        >
+      </label>
+
+      <label>
+        ワンタップ記録時のメモ
+        <input
+          type="text"
+          id="medicine-default-note"
+          placeholder="例：朝食後、就寝前"
+        >
+      </label>
+
+      <div class="form-action-buttons">
+        <button
+          type="submit"
+          id="medicine-registration-submit"
+          class="save-button"
+        >
+          薬を登録
+        </button>
+
+        <button
+          type="button"
+          id="cancel-medicine-edit"
+          class="cancel-edit-button hidden-button"
+        >
+          編集をキャンセル
+        </button>
+      </div>
+    </form>
+
+    <div
+      id="registered-medicine-list"
+      class="registered-medicine-list"
+    >
+      <p class="empty-message">
+        まだ薬は登録されていません。
+      </p>
+    </div>
+  </section>
+
+  <section class="record-section">
+    <h2>内容を指定して現在時刻で記録</h2>
+
+    <form id="current-medicine-form">
+      <label>
+        薬
+        <select id="current-medicine-select">
+          <option value="">
+            薬を選択してください
+          </option>
+        </select>
+      </label>
+
+      <label>
+        服用量
+        <input
+          type="text"
+          id="current-medicine-dose"
+          placeholder="例：1錠"
+        >
+      </label>
+
+      <label>
+        メモ
+        <input
+          type="text"
+          id="current-medicine-note"
+          placeholder="例：朝食後、頭痛のため"
+        >
+      </label>
+
+      <button
+        type="submit"
+        class="medicine-record-button"
+      >
+        現在時刻で服用を記録
+      </button>
+    </form>
+  </section>
+
+  <section class="record-section">
+    <h2>日時を指定して記録</h2>
+
+    <form id="manual-medicine-form">
+      <label>
+        薬
+        <select id="manual-medicine-select">
+          <option value="">
+            薬を選択してください
+          </option>
+        </select>
+      </label>
+
+      <label>
+        服用日時
+        <input
+          type="datetime-local"
+          id="manual-medicine-datetime"
+        >
+      </label>
+
+      <label>
+        服用量
+        <input
+          type="text"
+          id="manual-medicine-dose"
+          placeholder="例：1錠"
+        >
+      </label>
+
+      <label>
+        メモ
+        <input
+          type="text"
+          id="manual-medicine-note"
+          placeholder="任意"
+        >
+      </label>
+
+      <button
+        type="submit"
+        class="save-button"
+      >
+        服用記録を保存
+      </button>
+    </form>
+  </section>
+
+  <section class="record-section">
+    <h2>服用履歴</h2>
+
+    <div id="medicine-record-list">
+      <p class="empty-message">
+        まだ服用記録はありません。
+      </p>
+    </div>
+  </section>
+</section>
+
+<!-- カフェイン -->
+<section id="caffeine-screen" class="screen">
+  <section class="record-section">
+    <h2>よく使うカフェイン</h2>
+
+    <p class="section-description">
+      登録した項目を押すと、設定した量を現在時刻で記録します。
+    </p>
+
+    <div
+      id="caffeine-quick-list"
+      class="quick-record-grid"
+    >
+      <p class="empty-message">
+        まだよく使う項目は登録されていません。
+      </p>
+    </div>
+
+    <p
+      id="caffeine-status-message"
+      class="status-message"
+    ></p>
+  </section>
+
+  <section class="record-section">
+    <h2 id="caffeine-preset-form-title">
+      よく使う項目を登録
+    </h2>
+
+    <form id="caffeine-preset-form">
+      <input
+        type="hidden"
+        id="editing-caffeine-preset-id"
+      >
+
+      <label>
+        名前
+        <input
+          type="text"
+          id="caffeine-preset-name"
+          placeholder="例：朝のコーヒー、カフェイン錠剤"
+        >
+      </label>
+
+      <label>
+        カフェイン量
+        <div class="unit-input">
+          <input
+            type="number"
+            id="caffeine-preset-amount"
+            min="0"
+            step="1"
+            placeholder="例：100"
+          >
+          <span>mg</span>
+        </div>
+      </label>
+
+      <label>
+        ワンタップ記録時のメモ
+        <input
+          type="text"
+          id="caffeine-preset-note"
+          placeholder="例：眠気対策、朝食後"
+        >
+      </label>
+
+      <div class="form-action-buttons">
+        <button
+          type="submit"
+          id="caffeine-preset-submit"
+          class="save-button"
+        >
+          項目を登録
+        </button>
+
+        <button
+          type="button"
+          id="cancel-caffeine-preset-edit"
+          class="cancel-edit-button hidden-button"
+        >
+          編集をキャンセル
+        </button>
+      </div>
+    </form>
+
+    <div
+      id="registered-caffeine-preset-list"
+      class="registered-medicine-list"
+    >
+      <p class="empty-message">
+        まだよく使う項目は登録されていません。
+      </p>
+    </div>
+  </section>
+
+  <section class="record-section">
+    <h2>内容を指定して現在時刻で記録</h2>
+
+    <form id="current-caffeine-form">
+      <label>
+        飲み物・食品
+        <select id="current-caffeine-type">
+          <option value="">選択してください</option>
+          <option value="コーヒー">コーヒー</option>
+          <option value="紅茶">紅茶</option>
+          <option value="緑茶">緑茶</option>
+          <option value="エナジードリンク">
+            エナジードリンク
+          </option>
+          <option value="栄養ドリンク">
+            栄養ドリンク
+          </option>
+          <option value="カフェイン錠剤">
+            カフェイン錠剤
+          </option>
+          <option value="チョコレート">
+            チョコレート
+          </option>
+          <option value="その他">その他</option>
+        </select>
+      </label>
+
+      <label
+        id="current-caffeine-other-label"
+        class="hidden-input"
+      >
+        その他の内容
+        <input
+          type="text"
+          id="current-caffeine-other"
+          placeholder="例：カフェラテ"
+        >
+      </label>
+
+      <label>
+        カフェイン量
+        <div class="unit-input">
+          <input
+            type="number"
+            id="current-caffeine-amount"
+            min="0"
+            step="1"
+            placeholder="例：100"
+          >
+          <span>mg</span>
+        </div>
+      </label>
+
+      <label>
+        メモ
+        <input
+          type="text"
+          id="current-caffeine-note"
+          placeholder="例：眠気対策、朝食後"
+        >
+      </label>
+
+      <button
+        type="submit"
+        class="caffeine-record-button"
+      >
+        現在時刻で記録
+      </button>
+    </form>
+  </section>
+
+  <section class="record-section">
+    <h2>日時を指定して記録</h2>
+
+    <form id="manual-caffeine-form">
+      <label>
+        飲み物・食品
+        <select id="manual-caffeine-type">
+          <option value="">選択してください</option>
+          <option value="コーヒー">コーヒー</option>
+          <option value="紅茶">紅茶</option>
+          <option value="緑茶">緑茶</option>
+          <option value="エナジードリンク">
+            エナジードリンク
+          </option>
+          <option value="栄養ドリンク">
+            栄養ドリンク
+          </option>
+          <option value="カフェイン錠剤">
+            カフェイン錠剤
+          </option>
+          <option value="チョコレート">
+            チョコレート
+          </option>
+          <option value="その他">その他</option>
+        </select>
+      </label>
+
+      <label
+        id="manual-caffeine-other-label"
+        class="hidden-input"
+      >
+        その他の内容
+        <input
+          type="text"
+          id="manual-caffeine-other"
+          placeholder="例：カフェラテ"
+        >
+      </label>
+
+      <label>
+        摂取日時
+        <input
+          type="datetime-local"
+          id="manual-caffeine-datetime"
+        >
+      </label>
+
+      <label>
+        カフェイン量
+        <div class="unit-input">
+          <input
+            type="number"
+            id="manual-caffeine-amount"
+            min="0"
+            step="1"
+            placeholder="例：100"
+          >
+          <span>mg</span>
+        </div>
+      </label>
+
+      <label>
+        メモ
+        <input
+          type="text"
+          id="manual-caffeine-note"
+          placeholder="任意"
+        >
+      </label>
+
+      <button
+        type="submit"
+        class="save-button"
+      >
+        カフェイン記録を保存
+      </button>
+    </form>
+  </section>
+
+  <section class="record-section">
+    <div class="section-title-row">
+      <h2>摂取履歴</h2>
+
+      <p
+        id="today-caffeine-total"
+        class="today-total"
+      >
+        今日の合計：0mg
+      </p>
+    </div>
+
+    <div id="caffeine-record-list">
+      <p class="empty-message">
+        まだカフェイン記録はありません。
+      </p>
+    </div>
+  </section>
+</section>
+
+   <!-- 外出 -->
+<section id="outing-screen" class="screen">
+  <section class="record-section">
+    <h2>現在時刻で記録</h2>
+
+    <p class="section-description">
+      外出時に目的を選んで記録し、帰宅したら帰宅ボタンを押します。
+    </p>
+
+    <label>
+      外出目的
+      <select id="current-outing-purpose">
+        <option value="">選択してください</option>
+        <option value="勉強">勉強</option>
+        <option value="大学">大学</option>
+        <option value="アルバイト">アルバイト</option>
+        <option value="買い物">買い物</option>
+        <option value="その他">その他</option>
+      </select>
+    </label>
+
+    <label
+      id="current-outing-other-label"
+      class="hidden-input"
+    >
+      その他の目的
+      <input
+        type="text"
+        id="current-outing-other"
+        placeholder="例：買い物、通院"
+      >
+    </label>
+
+    <div class="outing-action-buttons">
+      <button
+        type="button"
+        id="outing-start-button"
+        class="outing-button outing-start-button"
+      >
+        外出を記録
+      </button>
+
+      <button
+        type="button"
+        id="outing-return-button"
+        class="outing-button outing-return-button"
+      >
+        帰宅を記録
+      </button>
+    </div>
+
+    <p id="outing-status-message" class="status-message"></p>
+  </section>
+
+  <section class="record-section">
+    <h2>日時を指定して記録</h2>
+
+    <form id="manual-outing-form">
+      <input type="hidden" id="editing-outing-id">
+
+      <p id="outing-editing-message" class="editing-message hidden-button">
+        外出記録を編集中です。
+      </p>
+
+      <label>
+        外出目的
+        <select id="manual-outing-purpose">
+          <option value="">選択してください</option>
+          <option value="勉強">勉強</option>
+          <option value="大学">大学</option>
+          <option value="アルバイト">アルバイト</option>
+          <option value="買い物">買い物</option>
+          <option value="その他">その他</option>
+        </select>
+      </label>
+
+      <label id="manual-outing-other-label" class="hidden-input">
+        その他の目的
+        <input type="text" id="manual-outing-other" placeholder="例：通院">
+      </label>
+
+      <label>
+        外出日時
+        <input type="datetime-local" id="manual-outing-start">
+      </label>
+
+      <label>
+        帰宅日時
+        <input type="datetime-local" id="manual-outing-return">
+      </label>
+
+      <label>
+        メモ
+        <input type="text" id="manual-outing-note" placeholder="任意">
+      </label>
+
+      <div class="form-action-buttons">
+        <button type="submit" id="manual-outing-save-button" class="save-button">
+          外出記録を保存
+        </button>
+        <button type="button" id="cancel-outing-edit-button" class="cancel-edit-button hidden-button">
+          編集をキャンセル
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <section class="record-section">
+    <h2>外出履歴</h2>
+
+    <div id="outing-record-list">
+      <p class="empty-message">
+        まだ外出記録はありません。
+      </p>
+    </div>
+  </section>
+</section>
+
+    <!-- 家事 -->
+<section id="housework-screen" class="screen">
+  <section class="record-section">
+    <h2>現在時刻で記録</h2>
+
+    <p class="section-description">
+      行った家事を複数選択できます。
+    </p>
+
+    <form id="current-housework-form">
+      <div class="checkbox-list">
+        <label>
+          <input
+            type="checkbox"
+            name="current-housework"
+            value="洗濯"
+          >
+          洗濯
+        </label>
+
+        <label>
+          <input
+            type="checkbox"
+            name="current-housework"
+            value="ゴミ捨て"
+          >
+          ゴミ捨て
+        </label>
+
+        <label>
+          <input
+            type="checkbox"
+            name="current-housework"
+            value="皿洗い"
+          >
+          皿洗い
+        </label>
+
+        <label>
+          <input
+            type="checkbox"
+            name="current-housework"
+            value="掃除機"
+          >
+          掃除機
+        </label>
+      </div>
+
+      <label>
+        その他
+        <input
+          type="text"
+          id="current-housework-other"
+          placeholder="例：お風呂掃除"
+        >
+      </label>
+
+      <label>
+        メモ
+        <input
+          type="text"
+          id="current-housework-note"
+          placeholder="任意"
+        >
+      </label>
+
+      <button
+        type="submit"
+        class="housework-record-button"
+      >
+        現在時刻で家事を記録
+      </button>
+    </form>
+
+    <p id="housework-status-message" class="status-message"></p>
+  </section>
+
+  <section class="record-section">
+    <h2>日時を指定して記録</h2>
+
+    <form id="manual-housework-form">
+      <div class="checkbox-list">
+        <label>
+          <input
+            type="checkbox"
+            name="manual-housework"
+            value="洗濯"
+          >
+          洗濯
+        </label>
+
+        <label>
+          <input
+            type="checkbox"
+            name="manual-housework"
+            value="ゴミ捨て"
+          >
+          ゴミ捨て
+        </label>
+
+        <label>
+          <input
+            type="checkbox"
+            name="manual-housework"
+            value="皿洗い"
+          >
+          皿洗い
+        </label>
+
+        <label>
+          <input
+            type="checkbox"
+            name="manual-housework"
+            value="掃除機"
+          >
+          掃除機
+        </label>
+      </div>
+
+      <label>
+        その他
+        <input
+          type="text"
+          id="manual-housework-other"
+          placeholder="例：お風呂掃除"
+        >
+      </label>
+
+      <label>
+        実施日時
+        <input
+          type="datetime-local"
+          id="manual-housework-datetime"
+        >
+      </label>
+
+      <label>
+        メモ
+        <input
+          type="text"
+          id="manual-housework-note"
+          placeholder="任意"
+        >
+      </label>
+
+      <button type="submit" class="save-button">
+        家事記録を保存
+      </button>
+    </form>
+  </section>
+
+  <section class="record-section">
+    <h2>家事履歴</h2>
+
+    <div id="housework-record-list">
+      <p class="empty-message">
+        まだ家事記録はありません。
+      </p>
+    </div>
+  </section>
+</section>
+
+    <!-- カレンダー -->
+<section id="calendar-screen" class="screen">
+  <section class="record-section">
+    <div class="calendar-header">
+      <button
+        type="button"
+        id="previous-month-button"
+        class="calendar-move-button"
+      >
+        ←
+      </button>
+
+      <h2 id="calendar-month-title"></h2>
+
+      <button
+        type="button"
+        id="next-month-button"
+        class="calendar-move-button"
+      >
+        →
+      </button>
+    </div>
+
+    <div class="calendar-weekdays">
+      <span>日</span>
+      <span>月</span>
+      <span>火</span>
+      <span>水</span>
+      <span>木</span>
+      <span>金</span>
+      <span>土</span>
+    </div>
+
+    <div id="calendar-grid" class="calendar-grid"></div>
+
+    <button
+      type="button"
+      id="calendar-today-button"
+      class="calendar-today-button"
+    >
+      今月に戻る
+    </button>
+  </section>
+
+  <section class="record-section">
+    <h2 id="selected-date-title">
+      日付を選択してください
+    </h2>
+
+    <div id="selected-date-records">
+      <p class="empty-message">
+        カレンダーの日付を押すと、その日の記録を確認できます。
+      </p>
+    </div>
+  </section>
+</section>
+
+   <!-- 統計 -->
+<section id="statistics-screen" class="screen">
+  <section class="record-section">
+    <h2>集計期間</h2>
+
+    <label>
+      表示する期間
+      <select id="statistics-period">
+        <option value="7">過去7日間</option>
+        <option value="30" selected>過去30日間</option>
+        <option value="all">全期間</option>
+      </select>
+    </label>
+
+    <p id="statistics-period-text" class="section-description"></p>
+  </section>
+
+  <section class="statistics-summary-grid">
+    <article class="statistics-card">
+      <span class="statistics-label">気分の平均</span>
+      <strong id="average-mood">―</strong>
+      <span class="statistics-unit">5点満点</span>
+    </article>
+
+    <article class="statistics-card">
+      <span class="statistics-label">眠気の平均</span>
+      <strong id="average-sleepiness">―</strong>
+      <span class="statistics-unit">5点満点</span>
+    </article>
+
+    <article class="statistics-card">
+      <span class="statistics-label">やる気の平均</span>
+      <strong id="average-motivation">―</strong>
+      <span class="statistics-unit">5点満点</span>
+    </article>
+
+    <article class="statistics-card">
+      <span class="statistics-label">平均睡眠時間</span>
+      <strong id="average-sleep-duration">―</strong>
+      <span class="statistics-unit">記録済み睡眠</span>
+    </article>
+
+    <article class="statistics-card">
+      <span class="statistics-label">カフェイン合計</span>
+      <strong id="total-caffeine">0mg</strong>
+      <span id="average-caffeine" class="statistics-unit">
+        1日平均 0mg
+      </span>
+    </article>
+
+    <article class="statistics-card">
+      <span class="statistics-label">外出</span>
+      <strong id="outing-count">0回</strong>
+      <span id="outing-total-duration" class="statistics-unit">
+        合計 0時間0分
+      </span>
+    </article>
+
+    <article class="statistics-card">
+      <span class="statistics-label">薬の服用</span>
+      <strong id="medicine-count">0回</strong>
+      <span class="statistics-unit">服用記録</span>
+    </article>
+
+    <article class="statistics-card">
+      <span class="statistics-label">家事</span>
+      <strong id="housework-count">0回</strong>
+      <span class="statistics-unit">記録件数</span>
+    </article>
+  </section>
+
+  <section class="record-section">
+    <h2>状態の平均</h2>
+
+    <div class="statistics-bars">
+      <div class="statistics-bar-row">
+        <span>気分</span>
+
+        <div class="statistics-bar-track">
+          <div
+            id="mood-bar"
+            class="statistics-bar-fill"
+          ></div>
+        </div>
+
+        <strong id="mood-bar-value">―</strong>
+      </div>
+
+      <div class="statistics-bar-row">
+        <span>眠気</span>
+
+        <div class="statistics-bar-track">
+          <div
+            id="sleepiness-bar"
+            class="statistics-bar-fill"
+          ></div>
+        </div>
+
+        <strong id="sleepiness-bar-value">―</strong>
+      </div>
+
+      <div class="statistics-bar-row">
+        <span>やる気</span>
+
+        <div class="statistics-bar-track">
+          <div
+            id="motivation-bar"
+            class="statistics-bar-fill"
+          ></div>
+        </div>
+
+        <strong id="motivation-bar-value">―</strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="record-section">
+    <h2>家事の内訳</h2>
+
+    <div id="housework-statistics-list">
+      <p class="empty-message">
+        集計対象の家事記録はありません。
+      </p>
+    </div>
+  </section>
+
+  <section class="record-section">
+    <h2>薬の内訳</h2>
+
+    <div id="medicine-statistics-list">
+      <p class="empty-message">
+        集計対象の服用記録はありません。
+      </p>
+    </div>
+  </section>
+</section>
+
+    <!-- 設定 -->
+<section id="settings-screen" class="screen">
+  <section class="record-section">
+    <h2>保存データ</h2>
+
+    <p class="section-description">
+      現在、このブラウザに保存されている記録数です。
+    </p>
+
+    <div id="data-count-list" class="data-count-list">
+      <div class="data-count-row">
+        <span>今日の状態</span>
+        <strong id="daily-data-count">0件</strong>
+      </div>
+
+      <div class="data-count-row">
+        <span>睡眠</span>
+        <strong id="sleep-data-count">0件</strong>
+      </div>
+
+      <div class="data-count-row">
+        <span>登録済みの薬</span>
+        <strong id="registered-medicine-count">0件</strong>
+      </div>
+
+      <div class="data-count-row">
+        <span>薬の服用記録</span>
+        <strong id="medicine-data-count">0件</strong>
+      </div>
+
+      <div class="data-count-row">
+        <span>カフェイン</span>
+        <strong id="caffeine-data-count">0件</strong>
+      </div>
+
+      <div class="data-count-row">
+        <span>外出</span>
+        <strong id="outing-data-count">0件</strong>
+      </div>
+
+      <div class="data-count-row">
+        <span>家事</span>
+        <strong id="housework-data-count">0件</strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="record-section">
+    <h2>バックアップを書き出す</h2>
+
+    <p class="section-description">
+      すべての記録を1つのJSONファイルとして保存します。
+      定期的にバックアップすることをおすすめします。
+    </p>
+
+    <button
+      type="button"
+      id="export-data-button"
+      class="settings-primary-button"
+    >
+      バックアップを保存
+    </button>
+  </section>
+
+  <section class="record-section">
+    <h2>バックアップから復元</h2>
+
+    <p class="section-description">
+      このアプリから書き出したJSONファイルを選択してください。
+      現在のデータは、読み込んだデータに置き換わります。
+    </p>
+
+    <label class="file-input-label">
+      バックアップファイル
+      <input
+        type="file"
+        id="import-data-file"
+        accept=".json,application/json"
+      >
+    </label>
+
+    <button
+      type="button"
+      id="import-data-button"
+      class="settings-secondary-button"
+    >
+      選択したファイルを読み込む
+    </button>
+
+    <p id="settings-status-message" class="status-message"></p>
+  </section>
+
+  <section class="record-section danger-section">
+    <h2>全データを削除</h2>
+
+    <p class="section-description">
+      このブラウザに保存されているすべての記録を削除します。
+      この操作は元に戻せません。
+    </p>
+
+    <button
+      type="button"
+      id="delete-all-data-button"
+      class="danger-button"
+    >
+      すべてのデータを削除
+    </button>
+  </section>
+</section>
+  </main>
+
+ <script src="js/common.js" defer></script>
+<script src="js/navigation.js" defer></script>
+<script src="js/daily.js" defer></script>
+<script src="js/sleep.js" defer></script>
+<script src="js/medicine.js" defer></script>
+<script src="js/caffeine.js" defer></script>
+<script src="js/outing.js" defer></script>
+<script src="js/housework.js" defer></script>
+<script src="js/calendar.js" defer></script>
+<script src="js/statistics.js" defer></script>
+<script src="js/settings.js" defer></script>
+</body>
+</html>
