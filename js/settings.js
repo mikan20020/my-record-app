@@ -398,6 +398,7 @@ function deleteAllAppData() {
   );
 
   refreshAllScreens();
+  window.firebaseSync?.queueUpload();
 
   showSettingsStatus(
     "すべてのデータを削除しました。"

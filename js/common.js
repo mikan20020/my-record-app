@@ -125,28 +125,8 @@ function saveArrayToStorage(storageKey, data) {
     storageKey,
     JSON.stringify(data)
   );
-}
 
-/**
- * 保存された日時を日本語で表示します。
- */
-function formatJapaneseDateTime(dateTimeText) {
-  if (!dateTimeText) {
-    return "未記録";
+  if (!window.firebaseSync?.isApplyingRemote) {
+    window.firebaseSync?.queueUpload();
   }
-
-  const date = new Date(dateTimeText);
-
-  if (Number.isNaN(date.getTime())) {
-    return "日時が不正です";
-  }
-
-  return new Intl.DateTimeFormat("ja-JP", {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-    weekday: "short",
-    hour: "2-digit",
-    minute: "2-digit"
-  }).format(date);
 }

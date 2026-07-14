@@ -1019,3 +1019,36 @@ button {
     grid-template-columns: 1fr;
   }
 }
+
+/* Firebase同期 */
+.sync-account-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: #f6f6f6;
+}
+
+.sync-account-row strong {
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.sync-button-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.sync-error {
+  color: #9a3030;
+}
+
+@media (max-width: 500px) {
+  .sync-button-row {
+    grid-template-columns: 1fr;
+  }
+}
