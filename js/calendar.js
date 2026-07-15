@@ -278,24 +278,128 @@ function displaySelectedDateRecords(dateKey) {
   displayCalendar();
 }
 
+function safelyRunCalendarUpdate(updateFunction, label) {
+  if (typeof updateFunction !== "function") {
+    return;
+  }
+
+  try {
+    updateFunction();
+  } catch (error) {
+    console.error(
+      `${label}の更新に失敗しました。`,
+      error
+    );
+  }
+}
+
 function refreshAfterCalendarChange(dateKey) {
+  selectedCalendarDate = dateKey;
+
+  /*
+   * 一部の画面更新に失敗しても、
+   * 保存・削除そのものを失敗扱いにしません。
+   */
+  safelyRunCalendarUpdate(
+    displayCalendar,
+    "カレンダー"
+  );
+
+  if (dateKey) {
+    try {
+      displaySelectedDateRecords(dateKey);
+    } catch (error) {
+      console.error(
+        "選択日の記録表示に失敗しました。",
+        error
+      );
+    }
+  }
+
+  safelyRunCalendarUpdate(
+    typeof displayRecords === "function"
+      ? displayRecords
+      : null,
+    "今日の状態"
+  );
+
+  safelyRunCalendarUpdate(
+    typeof displaySleepRecords === "function"
+      ? displaySleepRecords
+      : null,
+    "睡眠履歴"
+  );
+
+  safelyRunCalendarUpdate(
+    typeof displayRegisteredMedicines === "function"
+      ? displayRegisteredMedicines
+      : null,
+    "登録済みの薬"
+  );
+
+  safelyRunCalendarUpdate(
+    typeof displayMedicineRecords === "function"
+      ? displayMedicineRecords
+      : null,
+    "服用履歴"
+  );
+
+  safelyRunCalendarUpdate(
+    typeof displayCaffeinePresets === "function"
+      ? displayCaffeinePresets
+      : null,
+    "カフェインプリセット"
+  );
+
+  safelyRunCalendarUpdate(
+    typeof displayCaffeineRecords === "function"
+      ? displayCaffeineRecords
+      : null,
+    "カフェイン履歴"
+  );
+
+  safelyRunCalendarUpdate(
+    typeof displayOutingRecords === "function"
+      ? displayOutingRecords
+      : null,
+    "外出履歴"
+  );
+
+  safelyRunCalendarUpdate(
+    typeof displayHouseworkRecords === "function"
+      ? displayHouseworkRecords
+      : null,
+    "家事履歴"
+  );
+
+  safelyRunCalendarUpdate(
+    typeof displayStatistics === "function"
+      ? displayStatistics
+      : null,
+    "統計"
+  );
+
+  safelyRunCalendarUpdate(
+    typeof displayDataCounts === "function"
+      ? displayDataCounts
+      : null,
+    "設定の件数"
+  );
 
   if (
     window.firebaseSync &&
-    typeof window.firebaseSync.queueUpload === "function"
+    typeof window.firebaseSync.queueUpload ===
+      "function"
   ) {
-    window.firebaseSync.queueUpload();
+    try {
+      window.firebaseSync.queueUpload();
+    } catch (error) {
+      console.error(
+        "Firebase同期の予約に失敗しました。",
+        error
+      );
+    }
   }
-
-  if (typeof refreshAllScreens === "function") {
-    refreshAllScreens();
-  } else {
-    displayCalendar();
-  }
-
-  selectedCalendarDate = dateKey;
-
-  displaySelectedDateRecords(dateKey);
 }
 
 function getCalendarRecord(type, id) {
@@ -422,7 +526,10 @@ function saveCalendarEdit(form) {
 
   if (type === "daily") {
     const records = loadRecords();
-    const record = records.find((item) => item.id === id);
+    const record = records.find(
+  (item) =>
+    String(item.id) === String(id)
+);
     if (!record) return;
     record.date = String(data.get("date"));
     record.time = String(data.get("time"));
@@ -438,7 +545,10 @@ function saveCalendarEdit(form) {
     saveRecords(records);
   } else if (type === "sleep") {
     const records = loadSleepRecords();
-    const record = records.find((item) => item.id === id);
+    const record = records.find(
+  (item) =>
+    String(item.id) === String(id)
+);
     if (!record) return;
     const bedtime = new Date(String(data.get("bedtime")));
     const waketimeText = String(data.get("waketime") || "");
@@ -453,7 +563,10 @@ function saveCalendarEdit(form) {
     saveSleepRecords(records);
   } else if (type === "medicine") {
     const records = loadMedicineRecords();
-    const record = records.find((item) => item.id === id);
+    const record = records.find(
+  (item) =>
+    String(item.id) === String(id)
+);
     if (!record) return;
     record.medicineName = String(data.get("medicineName")).trim();
     record.datetime = new Date(String(data.get("datetime"))).toISOString();
@@ -463,7 +576,10 @@ function saveCalendarEdit(form) {
     saveMedicineRecords(records);
   } else if (type === "caffeine") {
     const records = loadCaffeineRecords();
-    const record = records.find((item) => item.id === id);
+    const record = records.find(
+  (item) =>
+    String(item.id) === String(id)
+);
     if (!record) return;
     record.type = String(data.get("type")).trim();
     record.datetime = new Date(String(data.get("datetime"))).toISOString();
@@ -473,7 +589,10 @@ function saveCalendarEdit(form) {
     saveCaffeineRecords(records);
   } else if (type === "outing") {
     const records = loadOutingRecords();
-    const record = records.find((item) => item.id === id);
+    const record = records.find(
+  (item) =>
+    String(item.id) === String(id)
+);
     if (!record) return;
     const startTime = new Date(String(data.get("startTime")));
     const returnText = String(data.get("returnTime") || "");
@@ -490,7 +609,10 @@ function saveCalendarEdit(form) {
     saveOutingRecords(records);
   } else {
     const records = loadHouseworkRecords();
-    const record = records.find((item) => item.id === id);
+    const record = records.find(
+  (item) =>
+    String(item.id) === String(id)
+);
     if (!record) return;
     record.items = String(data.get("items") || "")
       .split(/[、,]/)
@@ -508,89 +630,73 @@ function saveCalendarEdit(form) {
 }
 
 function deleteCalendarRecord(type, id) {
-  try {
-    const handlers = {
-      daily: [loadRecords, saveRecords],
-      sleep: [loadSleepRecords, saveSleepRecords],
-      medicine: [
-        loadMedicineRecords,
-        saveMedicineRecords
-      ],
-      caffeine: [
-        loadCaffeineRecords,
-        saveCaffeineRecords
-      ],
-      outing: [
-        loadOutingRecords,
-        saveOutingRecords
-      ],
-      housework: [
-        loadHouseworkRecords,
-        saveHouseworkRecords
-      ]
-    };
+  const handlers = {
+    daily: [
+      loadRecords,
+      saveRecords
+    ],
 
-    const handler = handlers[type];
+    sleep: [
+      loadSleepRecords,
+      saveSleepRecords
+    ],
 
-    if (!handler) {
-      throw new Error(
-        `削除対象の種類が不明です: ${type}`
-      );
-    }
+    medicine: [
+      loadMedicineRecords,
+      saveMedicineRecords
+    ],
 
-    const [load, save] = handler;
-    const records = load();
+    caffeine: [
+      loadCaffeineRecords,
+      saveCaffeineRecords
+    ],
 
-    const updatedRecords = records.filter(
-      (record) =>
-        String(record.id) !== String(id)
-    );
+    outing: [
+      loadOutingRecords,
+      saveOutingRecords
+    ],
 
-    if (updatedRecords.length === records.length) {
-      throw new Error(
-        "削除する記録が見つかりませんでした。"
-      );
-    }
+    housework: [
+      loadHouseworkRecords,
+      saveHouseworkRecords
+    ]
+  };
 
-    save(updatedRecords);
+  const handler = handlers[type];
 
-    const dateKey = selectedCalendarDate;
-
-    displayCalendar();
-
-    if (dateKey) {
-      displaySelectedDateRecords(dateKey);
-    }
-
-    if (
-      typeof displayStatistics === "function"
-    ) {
-      displayStatistics();
-    }
-
-    if (
-      typeof displayDataCounts === "function"
-    ) {
-      displayDataCounts();
-    }
-
-    if (
-      window.firebaseSync &&
-      typeof window.firebaseSync.queueUpload ===
-        "function"
-    ) {
-      window.firebaseSync.queueUpload();
-    }
-  } catch (error) {
-    console.error(
-      "カレンダーからの削除に失敗しました。",
-      error
-    );
-
+  if (!handler) {
     alert(
-      `削除できませんでした。\n${error.message}`
+      "削除対象の種類を確認できませんでした。"
     );
+    return;
   }
+
+  const [load, save] = handler;
+  const records = load();
+
+  const updatedRecords = records.filter(
+    (record) =>
+      String(record.id) !== String(id)
+  );
+
+  if (
+    updatedRecords.length === records.length
+  ) {
+    alert(
+      "削除する記録が見つかりませんでした。"
+    );
+    return;
+  }
+
+  /*
+   * この保存が成功した時点で、
+   * 削除そのものは完了しています。
+   */
+  save(updatedRecords);
+
+  refreshAfterCalendarChange(
+    selectedCalendarDate
+  );
 }
 
 calendarGrid.addEventListener("click", (event) => {
