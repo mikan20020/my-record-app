@@ -502,6 +502,11 @@
     <h2>日時を指定して記録</h2>
 
     <form id="manual-medicine-form">
+
+      <input type="hidden" id="editing-medicine-record-id">
+      <p id="medicine-record-editing-message" class="editing-message hidden-button">
+        服用記録を編集中です。
+      </p>
       <label>
         薬
         <select id="manual-medicine-select">
@@ -537,12 +542,14 @@
         >
       </label>
 
-      <button
-        type="submit"
-        class="save-button"
-      >
+      <div class="form-action-buttons">
+      <button type="submit" id="manual-medicine-save-button" class="save-button">
         服用記録を保存
       </button>
+      <button type="button" id="cancel-medicine-record-edit" class="cancel-edit-button hidden-button">
+        編集をキャンセル
+      </button>
+    </div>
     </form>
   </section>
 
@@ -726,6 +733,11 @@
     <h2>日時を指定して記録</h2>
 
     <form id="manual-caffeine-form">
+
+      <input type="hidden" id="editing-caffeine-record-id">
+      <p id="caffeine-record-editing-message" class="editing-message hidden-button">
+        カフェイン記録を編集中です。
+      </p>
       <label>
         飲み物・食品
         <select id="manual-caffeine-type">
@@ -790,12 +802,14 @@
         >
       </label>
 
-      <button
-        type="submit"
-        class="save-button"
-      >
+      <div class="form-action-buttons">
+      <button type="submit" id="manual-caffeine-save-button" class="save-button">
         カフェイン記録を保存
       </button>
+      <button type="button" id="cancel-caffeine-record-edit" class="cancel-edit-button hidden-button">
+        編集をキャンセル
+      </button>
+    </div>
     </form>
   </section>
 
@@ -1027,6 +1041,11 @@
     <h2>日時を指定して記録</h2>
 
     <form id="manual-housework-form">
+
+      <input type="hidden" id="editing-housework-record-id">
+      <p id="housework-record-editing-message" class="editing-message hidden-button">
+        家事記録を編集中です。
+      </p>
       <div class="checkbox-list">
         <label>
           <input
@@ -1067,7 +1086,7 @@
         <label>
           <input
             type="checkbox"
-            name="current-housework"
+            name="manual-housework"
             value="料理"
           >
           料理
@@ -1100,9 +1119,14 @@
         >
       </label>
 
-      <button type="submit" class="save-button">
+      <div class="form-action-buttons">
+      <button type="submit" id="manual-housework-save-button" class="save-button">
         家事記録を保存
       </button>
+      <button type="button" id="cancel-housework-record-edit" class="cancel-edit-button hidden-button">
+        編集をキャンセル
+      </button>
+    </div>
     </form>
   </section>
 

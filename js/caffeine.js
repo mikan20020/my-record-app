@@ -24,6 +24,10 @@ const manualCaffeineOther = document.querySelector("#manual-caffeine-other");
 const manualCaffeineDatetime = document.querySelector("#manual-caffeine-datetime");
 const manualCaffeineAmount = document.querySelector("#manual-caffeine-amount");
 const manualCaffeineNote = document.querySelector("#manual-caffeine-note");
+const editingCaffeineRecordIdInput = document.querySelector("#editing-caffeine-record-id");
+const caffeineRecordEditingMessage = document.querySelector("#caffeine-record-editing-message");
+const manualCaffeineSaveButton = document.querySelector("#manual-caffeine-save-button");
+const cancelCaffeineRecordEditButton = document.querySelector("#cancel-caffeine-record-edit");
 const caffeineRecordList = document.querySelector("#caffeine-record-list");
 const caffeineStatusMessage = document.querySelector("#caffeine-status-message");
 const todayCaffeineTotal = document.querySelector("#today-caffeine-total");
@@ -128,8 +132,7 @@ function displayCaffeineRecords() {
           <h3>${escapeHtml(record.type)}</h3>
           <p class="caffeine-record-datetime">${formatJapaneseDateTime(record.datetime)}</p>
         </div>
-        <button type="button" class="delete-button caffeine-delete-button"
-          data-caffeine-id="${record.id}">削除</button>
+        <div class="record-action-buttons"><button type="button" class="edit-button caffeine-record-edit-button" data-caffeine-id="${record.id}">編集</button><button type="button" class="delete-button caffeine-delete-button" data-caffeine-id="${record.id}">削除</button></div>
       </div>
       <p class="caffeine-amount">${Number(record.amount)}mg</p>
       <p class="caffeine-note"><strong>メモ：</strong>${escapeHtml(record.note || "なし")}</p>
@@ -163,6 +166,42 @@ function addCaffeineRecord(type, amount, note, datetime) {
   if (typeof displayDataCounts === "function") {
     displayDataCounts();
   }
+}
+
+function refreshCaffeineAndSync() {
+  if (typeof refreshAllScreens === "function") refreshAllScreens(); else displayCaffeineRecords();
+  if (window.firebaseSync?.queueUpload) window.firebaseSync.queueUpload();
+}
+function cancelCaffeineRecordEditing() {
+  editingCaffeineRecordIdInput.value = "";
+  manualCaffeineForm.reset();
+  setCurrentCaffeineDateTime();
+  updateCaffeineOtherInput(manualCaffeineType, manualCaffeineOtherLabel, manualCaffeineOther);
+  manualCaffeineSaveButton.textContent = "カフェイン記録を保存";
+  caffeineRecordEditingMessage.classList.add("hidden-button");
+  cancelCaffeineRecordEditButton.classList.add("hidden-button");
+}
+function startCaffeineRecordEditing(id) {
+  const record = loadCaffeineRecords().find(r => String(r.id) === String(id));
+  if (!record) return alert("編集するカフェイン記録が見つかりません。");
+  editingCaffeineRecordIdInput.value = record.id;
+  const standard = Array.from(manualCaffeineType.options).map(o=>o.value).filter(v=>v&&v!=="その他");
+  if (standard.includes(record.type)) {
+    manualCaffeineType.value = record.type;
+    manualCaffeineOther.value = "";
+  } else {
+    manualCaffeineType.value = "その他";
+    manualCaffeineOther.value = record.type;
+  }
+  updateCaffeineOtherInput(manualCaffeineType, manualCaffeineOtherLabel, manualCaffeineOther);
+  if (manualCaffeineType.value === "その他") manualCaffeineOther.value = record.type;
+  manualCaffeineDatetime.value = formatDateTimeLocalValue(record.datetime);
+  manualCaffeineAmount.value = record.amount;
+  manualCaffeineNote.value = record.note || "";
+  manualCaffeineSaveButton.textContent = "変更を保存";
+  caffeineRecordEditingMessage.classList.remove("hidden-button");
+  cancelCaffeineRecordEditButton.classList.remove("hidden-button");
+  manualCaffeineForm.scrollIntoView({behavior:"smooth",block:"start"});
 }
 
 function cancelCaffeinePresetEditing() {
@@ -294,37 +333,33 @@ manualCaffeineForm.addEventListener("submit", (event) => {
   const type = getCaffeineTypeName(manualCaffeineType, manualCaffeineOther);
   const amountText = manualCaffeineAmount.value;
   const amount = Number(amountText);
-
-  if (!type || !manualCaffeineDatetime.value) {
-    alert("飲み物・食品と摂取日時を入力してください。");
-    return;
+  if (!type || !manualCaffeineDatetime.value) return alert("飲み物・食品と摂取日時を入力してください。");
+  if (amountText === "" || Number.isNaN(amount) || amount < 0) return alert("カフェイン量を正しく入力してください。");
+  const records = loadCaffeineRecords();
+  const editingId = editingCaffeineRecordIdInput.value;
+  if (editingId) {
+    const record = records.find(r=>String(r.id)===String(editingId));
+    if (!record) return alert("編集するカフェイン記録が見つかりません。");
+    record.type=type; record.amount=amount; record.note=manualCaffeineNote.value.trim(); record.datetime=new Date(manualCaffeineDatetime.value).toISOString();
+  } else {
+    records.push({id:createRecordId(),type,amount,note:manualCaffeineNote.value.trim(),datetime:new Date(manualCaffeineDatetime.value).toISOString()});
   }
-  if (amountText === "" || Number.isNaN(amount) || amount < 0) {
-    alert("カフェイン量を正しく入力してください。");
-    return;
-  }
-
-  addCaffeineRecord(
-    type,
-    amount,
-    manualCaffeineNote.value.trim(),
-    new Date(manualCaffeineDatetime.value).toISOString()
-  );
-  manualCaffeineForm.reset();
-  setCurrentCaffeineDateTime();
-  updateCaffeineOtherInput(manualCaffeineType, manualCaffeineOtherLabel, manualCaffeineOther);
-  showCaffeineStatus("カフェイン記録を保存しました。");
+  const edited=Boolean(editingId);
+  saveCaffeineRecords(records);
+  cancelCaffeineRecordEditing();
+  refreshCaffeineAndSync();
+  showCaffeineStatus(edited ? "カフェイン記録を変更しました。" : "カフェイン記録を保存しました。");
 });
 
 caffeineRecordList.addEventListener("click", (event) => {
-  const button = event.target.closest(".caffeine-delete-button");
-  if (!button || !confirm("このカフェイン記録を削除しますか？")) return;
-
-  saveCaffeineRecords(
-    loadCaffeineRecords().filter((record) => record.id !== button.dataset.caffeineId)
-  );
-  refreshAllScreens();
+  const edit = event.target.closest(".caffeine-record-edit-button");
+  if (edit) return startCaffeineRecordEditing(edit.dataset.caffeineId);
+  const del = event.target.closest(".caffeine-delete-button");
+  if (!del || !confirm("このカフェイン記録を削除しますか？")) return;
+  saveCaffeineRecords(loadCaffeineRecords().filter(r=>String(r.id)!==String(del.dataset.caffeineId)));
+  refreshCaffeineAndSync();
 });
+cancelCaffeineRecordEditButton.addEventListener("click", cancelCaffeineRecordEditing);
 
 setCurrentCaffeineDateTime();
 displayCaffeinePresets();
