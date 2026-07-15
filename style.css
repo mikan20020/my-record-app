@@ -61,10 +61,15 @@ button {
 
 input[type="date"],
 input[type="time"],
+input[type="datetime-local"],
 input[type="text"],
+input[type="number"],
 select,
 textarea {
+  display: block;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   margin-top: 6px;
   padding: 12px;
   border: 1px solid #cccccc;
@@ -81,6 +86,10 @@ textarea {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 12px;
   width: 100%;
+}
+
+.date-time-inputs label {
+  min-width: 0;
 }
 
 .checkbox-list {
@@ -129,7 +138,14 @@ button {
 @media (max-width: 500px) {
   .date-time-inputs,
   .checkbox-list {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .date-time-inputs input[type="date"],
+  .date-time-inputs input[type="time"] {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .container {
@@ -1110,22 +1126,3 @@ button {
   }
 }
 
-@media (max-width: 600px) {
-  .date-time-inputs {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
-    width: 100%;
-    min-width: 0;
-  }
-
-  .date-time-inputs label,
-  .date-time-inputs input,
-  #daily-record-form,
-  #daily-record-form section {
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-  }
-}
