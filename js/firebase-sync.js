@@ -270,11 +270,22 @@ async function initializeFirebase() {
       uploadButton?.classList.remove("hidden-button");
 
       try {
-        await startRealtimeSync();
-      } catch (error) {
-        console.error("Firestore同期エラー:", error);
-        setStatus(`同期失敗：${formatError(error)}`, true);
-      }
+  await startRealtimeSync(user);
+} catch (error) {
+  console.error("Firestore同期エラー:", error);
+
+  alert(
+    `名前: ${error.name}\n\n` +
+    `コード: ${error.code}\n\n` +
+    `メッセージ: ${error.message}\n\n` +
+    `${error.stack}`
+  );
+
+  setStatus(
+    `同期失敗：${error.message}`,
+    true
+  );
+}
     });
   } catch (error) {
     console.error("Firebase初期化エラー:", error);
