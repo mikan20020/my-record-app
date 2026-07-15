@@ -1119,3 +1119,41 @@ button {
     min-width: 0;
   }
 }
+
+@media (max-width: 600px) {
+  #daily-record-form,
+  #daily-record-form section,
+  #daily-record-form label {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  #daily-record-form input[type="date"],
+  #daily-record-form input[type="time"],
+  #daily-record-form input[type="datetime-local"] {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 600px) {
+  .date-time-inputs {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .date-time-inputs label,
+  .date-time-inputs input {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+}
