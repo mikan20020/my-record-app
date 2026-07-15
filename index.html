@@ -127,6 +127,17 @@
     <!-- 今日の状態 -->
     <section id="daily-screen" class="screen">
       <form id="daily-record-form">
+        <input
+  type="hidden"
+  id="editing-daily-record-id"
+>
+
+<p
+  id="daily-editing-message"
+  class="editing-message hidden-button"
+>
+  記録を編集中です。
+</p>
         <section class="record-section">
           <h2>記録日時</h2>
 
@@ -232,9 +243,23 @@
           ></textarea>
         </section>
 
-        <button type="submit" class="save-button">
-          保存する
-        </button>
+       <div class="form-action-buttons">
+  <button
+    type="submit"
+    id="daily-save-button"
+    class="save-button"
+  >
+    保存する
+  </button>
+
+  <button
+    type="button"
+    id="cancel-daily-edit-button"
+    class="cancel-edit-button hidden-button"
+  >
+    編集をキャンセル
+  </button>
+</div>
       </form>
 
       <section class="record-section saved-records-section">
