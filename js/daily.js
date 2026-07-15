@@ -12,6 +12,25 @@ const otherConditionInput = document.querySelector("#other-condition");
 const dailyNoteInput = document.querySelector("#daily-note");
 
 const recordList = document.querySelector("#record-list");
+const editingDailyRecordIdInput =
+  document.querySelector(
+    "#editing-daily-record-id"
+  );
+
+const dailyEditingMessage =
+  document.querySelector(
+    "#daily-editing-message"
+  );
+
+const dailySaveButton =
+  document.querySelector(
+    "#daily-save-button"
+  );
+
+const cancelDailyEditButton =
+  document.querySelector(
+    "#cancel-daily-edit-button"
+  );
 
 const STORAGE_KEY = "myDailyRecords";
 
@@ -139,14 +158,23 @@ function displayRecords() {
               <p class="record-time">${record.time}</p>
             </div>
 
-            <button
-              type="button"
-              class="delete-button"
-              data-record-id="${record.id}"
-            >
-              削除
-            </button>
-          </div>
+            <div class="record-action-buttons">
+  <button
+    type="button"
+    class="edit-button daily-edit-button"
+    data-record-id="${record.id}"
+  >
+    編集
+  </button>
+
+  <button
+    type="button"
+    class="delete-button daily-delete-button"
+    data-record-id="${record.id}"
+  >
+    削除
+  </button>
+</div>
 
           <dl class="record-details">
             <div>
@@ -188,6 +216,93 @@ function resetForm() {
   setCurrentDateTime();
 }
 
+function startDailyEditing(recordId) {
+  const records = loadRecords();
+
+  const targetRecord = records.find(
+    (record) =>
+      String(record.id) === String(recordId)
+  );
+
+  if (!targetRecord) {
+    alert("編集する記録が見つかりません。");
+    return;
+  }
+
+  editingDailyRecordIdInput.value =
+    targetRecord.id;
+
+  dateInput.value = targetRecord.date;
+  timeInput.value = targetRecord.time;
+  moodInput.value = targetRecord.mood || "";
+  sleepinessInput.value =
+    targetRecord.sleepiness || "";
+  motivationInput.value =
+    targetRecord.motivation || "";
+
+  document.querySelectorAll(
+    'input[name="condition"]'
+  ).forEach((checkbox) => {
+    checkbox.checked =
+      targetRecord.conditions?.includes(
+        checkbox.value
+      ) || false;
+  });
+
+  const fixedConditions = [
+    "頭痛",
+    "腹痛",
+    "だるさ",
+    "吐き気"
+  ];
+
+  const otherConditions =
+    (targetRecord.conditions || []).filter(
+      (condition) =>
+        !fixedConditions.includes(condition)
+    );
+
+  otherConditionInput.value =
+    otherConditions.join("、");
+
+  dailyNoteInput.value =
+    targetRecord.note || "";
+
+  dailySaveButton.textContent =
+    "変更を保存";
+
+  dailyEditingMessage.classList.remove(
+    "hidden-button"
+  );
+
+  cancelDailyEditButton.classList.remove(
+    "hidden-button"
+  );
+
+  dailyForm.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+function cancelDailyEditing() {
+  editingDailyRecordIdInput.value = "";
+
+  dailyForm.reset();
+  setCurrentDateTime();
+
+  dailySaveButton.textContent =
+    "保存する";
+
+  dailyEditingMessage.classList.add(
+    "hidden-button"
+  );
+
+  cancelDailyEditButton.classList.add(
+    "hidden-button"
+  );
+}
+
 /**
  * 記録を削除します。
  */
@@ -204,56 +319,158 @@ function deleteRecord(recordId) {
 
 currentTimeButton.addEventListener("click", setCurrentDateTime);
 
-form.addEventListener("submit", (event) => {
-  event.preventDefault();
+Form.addEventListener(
+  "submit",
+  (event) => {
+    event.preventDefault();
 
-  if (dateInput.value === "" || timeInput.value === "") {
-    alert("日付と時刻を入力してください。");
-    return;
+    if (
+      dateInput.value === "" ||
+      timeInput.value === ""
+    ) {
+      alert(
+        "日付と時刻を入力してください。"
+      );
+      return;
+    }
+
+    const records = loadRecords();
+
+    const editingId =
+      editingDailyRecordIdInput.value;
+
+    const recordData = {
+      date: dateInput.value,
+      time: timeInput.value,
+      mood: moodInput.value,
+      sleepiness: sleepinessInput.value,
+      motivation: motivationInput.value,
+      conditions: getSelectedConditions(),
+      note: dailyNoteInput.value.trim()
+    };
+
+    if (editingId !== "") {
+      const targetRecord = records.find(
+        (record) =>
+          String(record.id) ===
+          String(editingId)
+      );
+
+      if (!targetRecord) {
+        alert(
+          "編集する記録が見つかりません。"
+        );
+        return;
+      }
+
+      Object.assign(
+        targetRecord,
+        recordData
+      );
+    } else {
+      records.push({
+        id: createRecordId(),
+        ...recordData
+      });
+    }
+
+    const wasEditing =
+      editingId !== "";
+
+    saveRecords(records);
+    cancelDailyEditing();
+
+    if (
+      typeof refreshAllScreens ===
+      "function"
+    ) {
+      refreshAllScreens();
+    } else {
+      displayRecords();
+    }
+
+    if (
+      window.firebaseSync &&
+      typeof window.firebaseSync
+        .queueUpload === "function"
+    ) {
+      window.firebaseSync.queueUpload();
+    }
+
+    alert(
+      wasEditing
+        ? "記録を変更しました。"
+        : "記録を保存しました。"
+    );
   }
+);
 
-  const newRecord = {
-    id: crypto.randomUUID(),
-    date: dateInput.value,
-    time: timeInput.value,
-    mood: moodInput.value,
-    sleepiness: sleepinessInput.value,
-    motivation: motivationInput.value,
-    conditions: getSelectedConditions(),
-    note: dailyNoteInput.value.trim()
-  };
+recordList.addEventListener(
+  "click",
+  (event) => {
+    const editButton =
+      event.target.closest(
+        ".daily-edit-button"
+      );
 
-  const records = loadRecords();
+    if (editButton) {
+      startDailyEditing(
+        editButton.dataset.recordId
+      );
+      return;
+    }
 
-  records.push(newRecord);
-  saveRecords(records);
+    const deleteButton =
+      event.target.closest(
+        ".daily-delete-button"
+      );
 
-  displayRecords();
-  resetForm();
+    if (!deleteButton) {
+      return;
+    }
 
-  alert("記録を保存しました。");
-});
+    if (
+      !confirm(
+        "この記録を削除しますか？"
+      )
+    ) {
+      return;
+    }
 
-recordList.addEventListener("click", (event) => {
-  const deleteButton = event.target.closest(".delete-button");
+    const updatedRecords =
+      loadRecords().filter(
+        (record) =>
+          String(record.id) !==
+          String(
+            deleteButton.dataset.recordId
+          )
+      );
 
-  if (deleteButton === null) {
-    return;
+    saveRecords(updatedRecords);
+
+    if (
+      typeof refreshAllScreens ===
+      "function"
+    ) {
+      refreshAllScreens();
+    } else {
+      displayRecords();
+    }
+
+    if (
+      window.firebaseSync &&
+      typeof window.firebaseSync
+        .queueUpload === "function"
+    ) {
+      window.firebaseSync.queueUpload();
+    }
   }
+);
 
-  const recordId = deleteButton.dataset.recordId;
-
-  const shouldDelete = confirm(
-    "この記録を削除しますか？"
-  );
-
-  if (shouldDelete) {
-    deleteRecord(recordId);
-  }
-});
-
-setCurrentDateTime();
-displayRecords();
+cancelDailyEditButton.addEventListener(
+  "click",
+  cancelDailyEditing
+);
 
 
 
